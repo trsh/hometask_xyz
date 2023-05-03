@@ -23,6 +23,7 @@
 #### This does not reflect a good and production ready code:
 
 - I did not care about front end tech in this case and did it in pure javascript, because it feels an overkill to add React or similar for such tiny functionality.
+- No persistence for the docs. Could store it in memory for showcase, in some dictionary, but its not much of a wisdom to do so.
 - No CSS, public assets, etc.
 - I did not care about handling errors or making front end user friendly or nice.
 - Did not comment the code properly.
