@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Docs Spaces</title>
+</head>
+<body>
+    Enter document ID<br>
+    <input id="doc-id-input" type="text" size="100"><br>
+    <input id="doc-id-submit" type="button" value="Enter">
+
+    <script>
+        document.querySelector('#doc-id-input').focus();
+        document.querySelector('#doc-id-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#doc-id-submit').click();
+            }
+        };
+
+        document.querySelector('#doc-id-submit').onclick = function(e) {
+            var docID = document.querySelector('#doc-id-input').value;
+            window.location.pathname = '/docs/' + docID + '/';
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Docs edit</title>
+</head>
+<body>
+    <textarea id="docs-log" cols="100" rows="20" readonly></textarea><br>
+    
+    <label for="text">Text:</label>
+    <input id="docs-message-text-input" type="text" name="text" size="100"><br>
+
+    <label for="text">Context:</label>
+    <input id="docs-message-context-input" type="text" name="context" size="100"><br>
+
+    <input id="docs-message-submit" type="button" value="Send">
+    {{ doc_id|json_script:"doc-id" }}
+    <script>
+        const docID = JSON.parse(document.getElementById('doc-id').textContent);
+
+        const docsSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/docs/'
+            + docID
+            + '/'
+        );
+
+        docsSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#docs-log').value += (`text: ${data.text}, context: ${data.context}` + '\n');
+        };
+
+        docsSocket.onclose = function(e) {
+            console.error('Docs socket closed unexpectedly');
+        };
+
+        document.querySelector('#docs-message-submit').onclick = function(e) {
+            const text = document.querySelector('#docs-message-text-input').value;
+            const context = document.querySelector('#docs-message-context-input').value;
+
+            docsSocket.send(JSON.stringify({
+                'text': text,
+                'context': context
+            }));
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Docs edit</title>
+</head>
+<body>
+    <textarea id="docs-log" cols="100" rows="20" readonly></textarea><br>
+    {{ doc_id|json_script:"doc-id" }}
+    <script>
+        const docID = JSON.parse(document.getElementById('doc-id').textContent);
+
+        const docsSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/docs/'
+            + docID
+            + '/'
+        );
+
+        docsSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#docs-log').value += (`text: ${data.text}, context: ${data.context}` + '\n');
+        };
+
+        docsSocket.onclose = function(e) {
+            console.error('Docs socket closed unexpectedly');
+        };
+    </script>
+</body>
+</html>
